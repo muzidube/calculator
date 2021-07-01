@@ -8,61 +8,75 @@ const equalsBtn = document.getElementById("equalsBtn");
 const dotBtn = document.getElementById("dotBtn");
 const input = document.getElementById("input");
 
+window.addEventListener('keydown', forKeys);
+buttons.forEach(btn => btn.addEventListener('click', forButtons));
+symButtons.forEach(symBtn => symBtn.addEventListener('click', forSymbols));
+clearBtn.addEventListener('click', forClear);
+deleteBtn.addEventListener('click', forDelete);
+answerBtn.addEventListener('click', forAnswer);
+dotBtn.addEventListener('click', forDot);
+equalsBtn.addEventListener('click', forEquals);
 
 add = (a, b) => a + b;
 subtract = (a, b) => a - b;
 multiply = (a, b) => a * b;
 divide = (a, b) => a / b;
 
-buttons.forEach(btn => btn.addEventListener('click', function(e) {
+
+function forKeys(e) {
+    const key = document.querySelector(`button[data-key="${e.keyCode}"]`);
+    key.click();
+};
+
+function forButtons(e) {
 
     if (input.textContent == "0") {
         input.textContent = e.target.innerText;
     } 
+    else if (input.textContent.includes(".")) {
+        input.textContent += e.target.innerText;
+    }
     else {
         input.textContent += e.target.innerText;
     }
     console.log(e.target.innerText); 
-}));
+};
 
-symButtons.forEach(symBtn => symBtn.addEventListener('click', function(e) {
+function forSymbols(e) {
 
     console.log(e.target.innerText);
     input.textContent += " " + e.target.innerText + " ";
-}));
+};
 
-clearBtn.addEventListener('click', function(e) {
+function forClear(e) {
     let clearString = "";
     let refresh = "0"
     input.textContent = refresh;
     result.textContent = clearString;
-});
+};
 
-deleteBtn.addEventListener('click', function(e) {
+function forDelete(e) {
     let newString = input.textContent.slice(0, -1) 
     input.textContent = newString;
-});
+};
 
-answerBtn.addEventListener('click', function(e) {
+function forAnswer(e) {
     let answer = result.textContent;
     let copyAnswer = answer.toString().slice();
     console.log(answer);
     input.textContent += copyAnswer.toString();
-});
+};
 
+function forDot(e) {
+    input.textContent += "" + e.target.innerText + "";
+    
+};
 
-dotBtn.addEventListener('click', function(e) {
-    console.log(e.target.innerText);
-    input.textContent += " " + e.target.innerText + " ";
-});
-
-equalsBtn.addEventListener('click', function(e) {
+function forEquals(e) {
     input.textContent += "";
-    result.textContent = equation(input.textContent);
+    result.textContent = roundNumber(equation(input.textContent));
     console.log(equation(input.textContent));
-});
-
-
+};
 
 function calculation(a, symbol, b) {
 
@@ -73,13 +87,14 @@ function calculation(a, symbol, b) {
     if (symbol === "-") return a - b;
     if (symbol === "x") return a * b;
     if (symbol === "/") return a / b;
-}
+};
 
 function equation(equation) {
 
 	equation = equation.split(" ");
+    console.log(equation);
 
-	const symbols = ["/", "x", "+", "-"];
+	const symbols = ["/", "x", "-", "+"];
 	let a;
 	let b;
 	let symbol;
@@ -98,5 +113,9 @@ function equation(equation) {
 	}
 
 	return result;
-}
+};
+
+function roundNumber(number) {
+    return Math.round(number * 1000) / 1000;
+};
 
